@@ -19,8 +19,20 @@ import java.util.ArrayList;
 /**
  * Unit test for simple App.
  */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AppTest 
-{
+{   
+
+    @Rule
+    public TestRule watcher =
+    new TestWatcher() {
+    protected void starting(Description description) {
+        System.out.println("Starting test: " + description.getMethodName());
+        }
+    };
+
+
     App app;
     
     @Before
@@ -31,49 +43,72 @@ public class AppTest
 
 
     @Test
-    public void Team1_positiontest(){
-        for (int i = 0; i<3; i++){
+    public void GroupNumbertest(){
+        int case1 = app.ReturnGroupNumber(1,2);
+        int case2 = app.ReturnGroupNumber(3,2);
+        int case3 = app.ReturnGroupNumber(2,1);
+        int case4 = app.ReturnGroupNumber(3,3);
+        assertEquals (1, case1);
+        assertEquals (2, case2);
+        assertEquals (3, case3);
+        assertEquals (2, case4);
 
-            assertTrue(app.Students[i] == "Mike" || app.Students[i] == "Ben" || app.Students[i] == "Sam");
-
-        }
-    }
-
-    @Test
-    public void Team2_positiontest(){
-        for (int i = 3; i<6; i++){
-
-            assertTrue(app.Students[i] == "George" || app.Students[i] == "James" || app.Students[i] == "Tanner");
-
-        }
     }
 
 
     @Test
-    public void Team3_positiontest(){
-        for (int i = 6; i<9; i++){
-
-            assertTrue(app.Students[i] == "Reeves" || app.Students[i] == "Homer" || app.Students[i] == "John");
-
+    public void GroupNumbertestcase1(){
+        String[] case1 = app.ReturnGroupMember(1,2);
+        String[] answer = {"A","B"};
+        for (int i = 0; i<2; i++){
+            assertEquals(answer[i],case1[i]);
         }
     }
+
 
     @Test
-    public void Team4_positiontest(){
-        for (int i = 9; i<12; i++){
-
-            assertTrue(app.Students[i] == "Simon" || app.Students[i] == "Adam" || app.Students[i] == "Smith");
-
+    public void GroupNumbertestcase2(){
+        String[] case1 = app.ReturnGroupMember(2,2);
+        String[] answer = {"C","D"};
+        for (int i = 0; i<2; i++){
+            assertEquals(answer[i],case1[i]);
         }
     }
+
+
 
     @Test
-    public void Team5_positiontest(){
-        for (int i = 12; i<14; i++){
-
-            assertTrue(app.Students[i] == "Jacob" || app.Students[i] == "Josh" );
-
-        }
+    public void GroupNumbertestcase3(){
+        String[] case1 = app.ReturnGroupMember(3,1);
+        String[] answer = {"D"};
+            assertEquals(answer[0],case1[0]);
     }
+
+
+    //test first person in group 1, A's happiness
+    @Test
+    public void Happinesstest1(){
+        int case1 = app.PersonalHappiness(0,2,3);
+        assertEquals (3, case1);
+    }
+
+
+    //test third person in group 2 C's happiness
+    @Test
+    public void Happinesstest2(){
+        int case1 = app.PersonalHappiness(2,2,3);
+        assertEquals (1, case1);
+    }
+
+
+
+    //test third person in group 2 C's happiness
+    @Test
+    public void Happinesstest3(){
+        int case1 = app.PersonalHappiness(2,1,3);
+        assertEquals (0, case1);
+    }
+
+    
 
 }

@@ -8,12 +8,12 @@ public class App
 {
     
 
-	static String[] StudentName = {"A","B","C","D"};
+	static String[] StudentName = {"1","2","3","4"};
 
-	static String[] A = {"B","C","D"};
-	static String[] B = {"A","C","D"};
-	static String[] C = {"A","B","D"};
-	static String[] D = {"A","B","C"};
+	static String[] A = {"2","3","4"};
+	static String[] B = {"1","3","4"};
+	static String[] C = {"1","2","4"};
+	static String[] D = {"1","2","3"};
 	//happiness is 3,2,1
 
 	static String[][] StudentSet= {A,B,C,D};
@@ -51,14 +51,30 @@ public class App
 			for (int j = 0; j < teamsize; j++)
 				{
 					if (StudentSet[index][i] == GourupMember[j]){
-						happiness += 3-i;
+						happiness += choices-i;
 					}
 				}
+		}
+		return happiness;
+		// TODO consider person have no choices and different choices
+	}
+
+
+	public int TeamHappiness(int index, int teamsize, int choices){
+		int GroupNum = ReturnGroupNumber(index,teamsize);
+		int startpoint = (GroupNum -1) * teamsize;
+		int happiness = 0;
+		for (int i = startpoint; i<startpoint+teamsize; i++){
+			happiness += PersonalHappiness(i,teamsize,choices);
 		}
 		return happiness;
 	}
 
 
+	public static double getRandom(double min, double max){
+	    double x = (int)(Math.random()*((max-min)+1))+min;
+	    return x;
+	}
 
 
 

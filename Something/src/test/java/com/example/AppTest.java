@@ -59,7 +59,7 @@ public class AppTest
     @Test
     public void GroupNumbertestcase1(){
         String[] case1 = app.ReturnGroupMember(1,2);
-        String[] answer = {"A","B"};
+        String[] answer = {"1","2"};
         for (int i = 0; i<2; i++){
             assertEquals(answer[i],case1[i]);
         }
@@ -69,7 +69,7 @@ public class AppTest
     @Test
     public void GroupNumbertestcase2(){
         String[] case1 = app.ReturnGroupMember(2,2);
-        String[] answer = {"C","D"};
+        String[] answer = {"3","4"};
         for (int i = 0; i<2; i++){
             assertEquals(answer[i],case1[i]);
         }
@@ -80,7 +80,7 @@ public class AppTest
     @Test
     public void GroupNumbertestcase3(){
         String[] case1 = app.ReturnGroupMember(3,1);
-        String[] answer = {"D"};
+        String[] answer = {"4"};
             assertEquals(answer[0],case1[0]);
     }
 
@@ -93,20 +93,45 @@ public class AppTest
     }
 
 
-    //test third person in group 2 C's happiness
     @Test
     public void Happinesstest2(){
         int case1 = app.PersonalHappiness(2,2,3);
         assertEquals (1, case1);
     }
 
-
-
-    //test third person in group 2 C's happiness
     @Test
     public void Happinesstest3(){
+        int case1 = app.PersonalHappiness(3,2,3);
+        assertEquals (1, case1);
+    }
+
+
+
+    @Test
+    public void Happinesstest4(){
         int case1 = app.PersonalHappiness(2,1,3);
         assertEquals (0, case1);
+    }
+
+    
+    @Test
+    public void TeamHappinesstest1(){
+        int case1 = app.TeamHappiness(0,2,3);
+        assertEquals (6, case1);
+    }
+
+    @Test
+    public void TeamHappinesstest2(){
+        int case1 = app.TeamHappiness(2,2,3);
+        assertEquals (2, case1);
+    }
+
+    @Test
+    public void RandomNumTest1(){
+        double case1 = app.getRandom(2,6);
+        assertTrue (case1>=2);
+        assertTrue (case1<=6);
+        assertEquals (0, case1 % 1, 0.001);
     }
 
     

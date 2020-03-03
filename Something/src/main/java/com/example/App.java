@@ -1,4 +1,4 @@
-package com.example;
+//package com.example;
 
 /**
  * Hello world!
@@ -55,7 +55,7 @@ public class App
 
 	public static void main( String[] args ){
 	    	System.out.println( "we are in" );
-	    	//Swap(1,3);
+	    	SwapController(3,2,3,3);
 	}
 
 	public void RemoveDuplicate(String[] array, int choices){
@@ -163,19 +163,22 @@ public class App
 
 
 
-	//Swaping function to be called
-	public static void Swap(int Times,int choices){
+
+	// swap controller to generate the random num; times of swaping; comparing the result
+	public static void SwapController(int Times, int teamsize, int choices, int percentage){
 		for(int i=0; i<Times; i++){
 			int position1 = (int)getRandom(0,5);
 			int position2 = (int)getRandom(0,5);
 			int BackwardPercentage = (int)getRandom(0,100);
-			if (BackwardPercentage <= 3){
+			if (BackwardPercentage <= percentage){
 				System.out.println( "Hit backwardButton" );
 				return;
 			}
+
 			while (position1 == position2){
 				position2 = (int)getRandom(0,5);
 			}
+
 			String Nameholder = StudentName[position2];
 			//make placeholder point to Position2
 			String[] Choiceholder = StudentSet[position2];
@@ -186,6 +189,7 @@ public class App
 	    	String position2nameholder = StudentName[position2];
 	    	System.out.println( "position1 is" + Integer.toString(position1) );
 	    	System.out.println( "position2 is" + Integer.toString(position2) );
+
 	    	for (int j=0; j<choices; j++){	
 	    		for (int k=0; k<StudentSet[position1].length; k++){
 	    			position1holder[j] = StudentSet[position1][j];
@@ -195,33 +199,23 @@ public class App
 	    		}
 	    	}
 
-
+	    	System.out.println( "position1holder is " + position1 );
 	    	for (int a=0;a<3;a++){
 	    		System.out.println( position1holder[a] );
 	    	}
-	    	System.out.println( "position1holder is " + position1 );
-
+	    	
+			System.out.println( "position2holder is " + position2);
 	    	for (int a=0;a<3;a++){
 	    		System.out.println( position2holder[a] );
 	    	}
-	    	System.out.println( "position2holder is " + position2);
-
-
-
 
 	    	//temporary happiness and V
-	    	int temphappiness = OverallHappiness(2,3);
-	    	double tempvariance = Variance(2,3);
+	    	int temphappiness = OverallHappiness(teamsize,choices);
+	    	double tempvariance = Variance(teamsize,choices);
 	    	System.out.println( "temp OverallHappiness is" + Integer.toString(temphappiness) );
 	    	System.out.println( "temp Variance is" + Double.toString(tempvariance) );
 
-	    	//Swap
-	    	StudentSet[position2] = StudentSet[position1];
-	    	StudentSet[position1] = Choiceholder;
-
-	    	StudentName[position2] = StudentName[position1];
-	    	StudentName[position1] = Nameholder;
-
+	    	Swap(position1,position2);
 
 	    	//happiness  and V after swap
 	    	int swaphappiness = OverallHappiness(2,3);
@@ -233,17 +227,19 @@ public class App
 
 	    	for (int a=0; a<StudentName.length; a++){
 	    		System.out.println( "Student: " + StudentName[a] );
-	    		for (int b=0; b<choices; b++){
-	    			if (StudentSet[a].length !=0){
-	    				System.out.println( StudentSet[a][b] );
-	    			}
-	    			else
-	    			{
-	    				System.out.println( "this set is NULL" );
-	    			}
+	    		if (StudentSet[a].length !=0){	    			
+		    		for (int b=0; b<choices; b++){
+		    			if (StudentSet[a][b] != null){
+		    				System.out.println( StudentSet[a][b] );
+		    			}
+		    		}
+	    		}
+	    		else{
+	    			System.out.println( "this set is NULL" );
 	    		}
 	    		System.out.println( "Next student" );
 	    	}
+
 
 	    	// keep if Overall is higher
 	    	if (swaphappiness >= temphappiness){
@@ -257,23 +253,38 @@ public class App
 	    		StudentSet[position2] = position2holder;
 	    	}
 
+
 	    	for (int a=0; a<StudentName.length; a++){
 	    		System.out.println( "Student: " + StudentName[a] );
-	    		for (int b=0; b<choices; b++){
-	    			if (StudentSet[a].length !=0){
-	    				System.out.println( StudentSet[a][b] );
-	    			}
-	    			else
-	    			{
-	    				System.out.println( "this set is NULL" );
-	    			}
+	    		if (StudentSet[a].length !=0){	    			
+		    		for (int b=0; b<choices; b++){
+		    			if (StudentSet[a][b] != null){
+		    				System.out.println( StudentSet[a][b] );
+		    			}
+		    		}
+	    		}
+	    		else{
+	    			System.out.println( "this set is NULL" );
 	    		}
 	    		System.out.println( "Next student" );
 	    	}
 
-
-
 		}
+	}
+
+	//Swaping function to be called
+	public static void Swap(int position1,int position2){
+
+			String Nameholder = StudentName[position2];
+			//make placeholder point to Position2
+			String[] Choiceholder = StudentSet[position2];
+
+	    	//Swap
+	    	StudentSet[position2] = StudentSet[position1];
+	    	StudentSet[position1] = Choiceholder;
+
+	    	StudentName[position2] = StudentName[position1];
+	    	StudentName[position1] = Nameholder;
 
 		return;
 	}

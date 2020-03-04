@@ -1,0 +1,28 @@
+Run 1000 (default) times for each result
+
+         priority: Take the higher overall happiness and keep the lower 3% (default) of the time in order to appraoch the overall max.
+
+         Generate 100 (default) saved results.
+
+         Variance: it represent the level of how squared deviation distribute their values; In other word, Lower variance means the valuse inside the set are more closer to mean in general.
+
+         Formula:  
+
+Goal: print two ways of grouping ① is the highest overall happiness ② is possibly not highest overall, but hava balanced distribution. 
+
+Walkthrough:
+
+     ① Generate all 100 groupset
+
+     ② Pick the one has highest overall happiness    (As H)
+
+     ③ select all resule in range 70% - 100% of H, comparing their variance, pick the one with lowest variance (As V) and print both H and V to user if V has lower variance than H.
+
+     ④ If not, pick the range from 60% - 100% than repeat all in step ③. 
+
+     ⑤ Keep extending the range up to 40% - 100% if the H keep having lower variance than V. ReDo step ①
+
+Have different level of verbosity to provide level 0-4 information
+
+
+// Default values can modify by users

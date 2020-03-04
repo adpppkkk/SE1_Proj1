@@ -1,0 +1,14 @@
+Jerry, Travis and Miranda
+
+The Inception Deck (Pg. 51 - 53)
+
+1. Why are we here? - We are here to help make groups where people are happy with their teammates.
+2. Elevator pitch - To do a program where groups are made, according to someone’s preference and the happiness is calculated.
+3. Product box - Rating Happiness. Great to use when making teams.
+4. NOT list - We are not going to do a few test cases and we are not going to do a few swaps to get happiness.
+5. Meet the neighbors - Know more about the person’s preferences.
+6. Show solution - Do many swaps to get a high variance of the overall happiness of the people on the team.
+7. Up at night - Make a good function to calculate the variance of the happiness and a swap function that make that variance effective.
+8. Size it up - 3 week project.
+9. What’s going to give - Give a high value of happiness, so the choices that people gave can be matched and effective during the swaping.
+10. What’s it going to take - Many taste cases and functions that calculate variance, that calculate happiness, and do swapping.

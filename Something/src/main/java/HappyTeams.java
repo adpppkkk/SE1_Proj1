@@ -65,23 +65,23 @@ public class HappyTeams
 		System.out.println( "try to get arguments" );
 		for (int i=0; i< args.length; i++) {
             System.out.println("i: " + i + " is: " + args[i]);
-            if (args[i] == "-t"){
+            if (args[i].equals("-t")){
             	teamsize = Integer.parseInt(args[i+1]);
             	System.out.println( "get teamsize" );
             }
-            if (args[i] == "-v"){
+            if (args[i].equals("-v")){
             	verbosity = Integer.parseInt(args[i+1]);
             	System.out.println( "get verbosity" );
             }
-            if (args[i] == "-n"){
+            if (args[i].equals("-n")){
             	swaptimes = Integer.parseInt(args[i+1]);
             	System.out.println( "get swaptimes" );
             }
-            if (args[i] == "-l"){
+            if (args[i].equals("-l")){
             	swaprounds = Integer.parseInt(args[i+1]);
             	System.out.println( "get swaprounds" );
             }
-            if (args[i] == "-r"){
+            if (args[i].equals("-r")){
             	rowback = Integer.parseInt(args[i+1]);
             	System.out.println( "get rowback" );
             }
@@ -129,9 +129,9 @@ public class HappyTeams
 
 	public static void main( String[] args ){
 	    	System.out.println( "we are in" );
-	    	//GetUserArguments(args);
+	    	GetUserArguments(args);
 	    	//SwapController(3,2,3,3);
-	    	ReadInput();
+	    	//ReadInput();
 	}
 
 

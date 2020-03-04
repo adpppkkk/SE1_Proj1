@@ -26,14 +26,14 @@ public class HappyTeams
 	//static String[] StudentName = {"1","3","4","2","6","5"};
 
 
-	static String[] StudentName = {"1","2","3","4","5","6"};
+	// static String[] StudentName = {"1","2","3","4","5","6"};
 
-	static String[] A = {"2","3","4"};
-	static String[] B = {};
-	static String[] C = {"1","2","4"};
-	static String[] D = {"1","2","3"};
-	static String[] E = {"2","3","6"};
-	static String[] F = {"5","2","1"};
+	// static String[] A = {"2","3","4"};
+	// static String[] B = {};
+	// static String[] C = {"1","2","4"};
+	// static String[] D = {"1","2","3"};
+	// static String[] E = {"2","3","6"};
+	// static String[] F = {"5","2","1"};
 
 
 	//DATA TO HELP ASSERT DELETE SELF
@@ -44,9 +44,13 @@ public class HappyTeams
 	// static String[] E = {"5","5","5"};
 	// static String[] F = {"6","2","1"};
 
+	static String[] StudentName = new String[100];
+	static String[][] StudentSet = new String[100][20];
+	static int Students = 0;
 
 
-	static String[][] StudentSet= {A,B,C,D,E,F};
+
+	// static String[][] StudentSet= {A,B,C,D,E,F};
 
 	// static String[][] StudentSet= {A,C,D,B,F,E};
 
@@ -99,10 +103,25 @@ public class HappyTeams
 
             // do something with the tokens
 
-            System.out.println(tokens[0] + "'s preference are: ");
+            // TODO: insert the people into arrays;
+            //System.out.println(tokens[0] + "'s preference are: ");
+            StudentName[Students] = tokens[0];
             for (int i=1; i<tokens.length; i++){
-            	System.out.println(tokens[i]);
+            	//System.out.println(tokens[i]);
+            	StudentSet[Students][i-1] = tokens[i];
             }
+
+            System.out.println("Student's name is: " + StudentName[Students]);
+
+            System.out.println("His choices are: ");
+            for (int i = 0; i<StudentSet[Students].length; i++)
+            {
+            	if (StudentSet[Students][i] != null){
+            		System.out.println(StudentSet[Students][i]);
+            	}
+            }
+
+           	Students++;
 
         }
         scanner.close(); 

@@ -1,0 +1,9 @@
+Week1: Create a simple array contain with names and have test cases to test on their groups
+
+Week2: Create Functions "Return Group Num", "Retrun Numbers of Groups", "Return all group members", "calculating personal happiness", "calculating team happiness"
+
+Week3: Finish the Functions "Overall happiness", "Variance calcuation", "get random int function", "Swap" (containing generating random numbers and comparing results)
+
+Week4: Separate "Swap" function into Swap(position1, position2) and the SwapController to make the test easier and add the STD input reading and writing database, have function to get command line argument; 
+
+TODO to let user to modify the program, Store the result and compare and print depend on the level of information they need.

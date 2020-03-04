@@ -1,4 +1,3 @@
-package com.example;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
  */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AppTest 
+public class HappyTeamsTest 
 {   
 
     @Rule
@@ -33,11 +32,11 @@ public class AppTest
     };
 
 
-    App app;
+    HappyTeams app;
     
     @Before
     public void initialize() {
-    app = new App();
+    app = new HappyTeams();
     }
 
 

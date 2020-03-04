@@ -1,10 +1,11 @@
 //package com.example;
+import java.util.*;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class HappyTeams 
 {
     
 
@@ -50,13 +51,70 @@ public class App
 	// static String[][] StudentSet= {A,C,D,B,F,E};
 
 
+	static int teamsize = 2;
+	static int verbosity = 0;
+	static int swaptimes = 1000;
+	static int swaprounds = 100;
+	static int rowback = 3;
 	
+	public static void GetUserArguments(String[] args){
+		System.out.println( "try to get arguments" );
+		for (int i=0; i< args.length; i++) {
+            System.out.println("i: " + i + " is: " + args[i]);
+            if (args[i] == "-t"){
+            	teamsize = Integer.parseInt(args[i+1]);
+            	System.out.println( "get teamsize" );
+            }
+            if (args[i] == "-v"){
+            	verbosity = Integer.parseInt(args[i+1]);
+            	System.out.println( "get verbosity" );
+            }
+            if (args[i] == "-n"){
+            	swaptimes = Integer.parseInt(args[i+1]);
+            	System.out.println( "get swaptimes" );
+            }
+            if (args[i] == "-l"){
+            	swaprounds = Integer.parseInt(args[i+1]);
+            	System.out.println( "get swaprounds" );
+            }
+            if (args[i] == "-r"){
+            	rowback = Integer.parseInt(args[i+1]);
+            	System.out.println( "get rowback" );
+            }
+        }
 
+        System.out.println( "teamsize is : " + teamsize);
+        System.out.println( "verbosity is : " + verbosity);
+        System.out.println( "swaptimes is : " + swaptimes);
+        System.out.println( "swaprounds is : " + swaprounds);
+        System.out.println( "rowback is : " + rowback);
+	}
+
+	public static void ReadInput(){
+		String tokens[];
+        Scanner scanner = new Scanner(System.in); 
+        while ( scanner.hasNext() ) {
+            String aLine = scanner.nextLine();
+            tokens = aLine.split(",");
+
+            // do something with the tokens
+
+            System.out.println(tokens[0] + "'s preference are: ");
+            for (int i=1; i<tokens.length; i++){
+            	System.out.println(tokens[i]);
+            }
+
+        }
+        scanner.close(); 
+	}
 
 	public static void main( String[] args ){
 	    	System.out.println( "we are in" );
-	    	SwapController(3,2,3,3);
+	    	//GetUserArguments(args);
+	    	//SwapController(3,2,3,3);
+	    	ReadInput();
 	}
+
 
 	public void RemoveDuplicate(String[] array, int choices){
 		for (int i = 0; i<choices-1; i++){
@@ -288,6 +346,9 @@ public class App
 
 		return;
 	}
+
+
+
 
 
 

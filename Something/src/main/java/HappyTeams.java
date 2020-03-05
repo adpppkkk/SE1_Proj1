@@ -47,6 +47,7 @@ public class HappyTeams
 	static String[] StudentName = new String[100];
 	static String[][] StudentSet = new String[100][20];
 	static int Students = 0;
+	static boolean EqualGroups = true;
 
 
 
@@ -54,44 +55,46 @@ public class HappyTeams
 
 	// static String[][] StudentSet= {A,C,D,B,F,E};
 
-
+	//default values that can be modify by user
 	static int teamsize = 2;
 	static int verbosity = 0;
 	static int swaptimes = 1000;
 	static int swaprounds = 100;
-	static int rowback = 3;
+	static int rollback = 3;
+
+	static int choices = 6;
 	
 	public static void GetUserArguments(String[] args){
 		System.out.println( "try to get arguments" );
 		for (int i=0; i< args.length; i++) {
-            System.out.println("i: " + i + " is: " + args[i]);
+            //System.out.println("i: " + i + " is: " + args[i]);
             if (args[i].equals("-t")){
             	teamsize = Integer.parseInt(args[i+1]);
-            	System.out.println( "get teamsize" );
+            	//System.out.println( "get teamsize" );
             }
             if (args[i].equals("-v")){
             	verbosity = Integer.parseInt(args[i+1]);
-            	System.out.println( "get verbosity" );
+            	//System.out.println( "get verbosity" );
             }
             if (args[i].equals("-n")){
             	swaptimes = Integer.parseInt(args[i+1]);
-            	System.out.println( "get swaptimes" );
+            	//System.out.println( "get swaptimes" );
             }
             if (args[i].equals("-l")){
             	swaprounds = Integer.parseInt(args[i+1]);
-            	System.out.println( "get swaprounds" );
+            	//System.out.println( "get swaprounds" );
             }
             if (args[i].equals("-r")){
-            	rowback = Integer.parseInt(args[i+1]);
-            	System.out.println( "get rowback" );
+            	rollback = Integer.parseInt(args[i+1]);
+            	//System.out.println( "get rollback" );
             }
         }
 
-        System.out.println( "teamsize is : " + teamsize);
-        System.out.println( "verbosity is : " + verbosity);
-        System.out.println( "swaptimes is : " + swaptimes);
-        System.out.println( "swaprounds is : " + swaprounds);
-        System.out.println( "rowback is : " + rowback);
+        // System.out.println( "teamsize is : " + teamsize);
+        // System.out.println( "verbosity is : " + verbosity);
+        // System.out.println( "swaptimes is : " + swaptimes);
+        // System.out.println( "swaprounds is : " + swaprounds);
+        // System.out.println( "rollback is : " + rollback);
 	}
 
 	public static void ReadInput(){
@@ -114,13 +117,19 @@ public class HappyTeams
             System.out.println("Student's name is: " + StudentName[Students]);
 
             System.out.println("His choices are: ");
+            int countHighestpref = 0;
             for (int i = 0; i<StudentSet[Students].length; i++)
             {
             	if (StudentSet[Students][i] != null){
             		System.out.println(StudentSet[Students][i]);
+            		if (countHighestpref < i+1){
+            			countHighestpref = i+1;
+            		}
             	}
             }
-
+            if (countHighestpref > choices){
+            	choices = countHighestpref;
+            }
            	Students++;
 
         }
@@ -130,70 +139,120 @@ public class HappyTeams
 	public static void main( String[] args ){
 	    	System.out.println( "we are in" );
 	    	GetUserArguments(args);
-	    	//SwapController(3,2,3,3);
-	    	//ReadInput();
-	}
-
-
-	public void RemoveDuplicate(String[] array, int choices){
-		for (int i = 0; i<choices-1; i++){
-			for (int j = i+1; j<choices; j++){
-				if (array[i] == array[j] && array[j] != "0"){
-					array[j] = "0";
-				}
-			}
-		}
-	}
-
-	public void RemoveSelf(String[] array, int choices){
-		for (int i = 0; i<6; i++){
-	    	for (int j = 0; j<3; j++){
-	    		if (StudentSet[i][j] == StudentName[i]){
-	    			StudentSet[i][j] ="0";
-	    		}
+	    	ReadInput();
+	    	IfequalGroups();
+	    	System.out.println( "We have " + choices + " choices" );
+	    	System.out.println( "amount of groups are: " + AmountofGroups(teamsize));
+	    	System.out.println(AmountofPersoninGroups(0) + " people in group 1");
+	    	System.out.println(AmountofPersoninGroups(3) + " people in group 2");
+	    	String[] GroupMember = ReturnGroupMember(3,teamsize);
+	    	System.out.println("Number "+ ReturnGroupNumber (3,teamsize) + " Group");
+	    	for (int i=0; i<teamsize; i++){
+	    		if (GroupMember[i] != null){
+	    			System.out.println(GroupMember[i]);
+	    		}	    		
 	    	}
-	    }
+	    	for(int i=0; i<Students; i++)
+	    	{
+	    		System.out.println( StudentName[i] + "'s happiness is: "+ PersonalHappiness(i,teamsize,choices));
+	    	}
+
+	    	for (int i=0; i<AmountofGroups(teamsize); i++){
+				System.out.println( "The " +(i+1) + " Team's happiness is: "+ TeamHappiness(i*teamsize,teamsize,choices));
+			}
+	    	
+	    	SwapController(1,teamsize,choices,rollback);
+	    	
 	}
+
+
+	// public void RemoveDuplicate(String[] array, int choices){
+	// 	for (int i = 0; i<choices-1; i++){
+	// 		for (int j = i+1; j<choices; j++){
+	// 			if (array[i] == array[j] && array[j] != "0"){
+	// 				array[j] = "0";
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	// public void RemoveSelf(String[] array, int choices){
+	// 	for (int i = 0; i<6; i++){
+	//     	for (int j = 0; j<3; j++){
+	//     		if (StudentSet[i][j] == StudentName[i]){
+	//     			StudentSet[i][j] ="0";
+	//     		}
+	//     	}
+	//     }
+	// }
 
 	// calculate the Group number
 	public static int ReturnGroupNumber(int index, int teamsize){ 
 		return index / teamsize +1;
 	}
 
+	public static void IfequalGroups ()
+	{
+		if (Students % teamsize ==0){
+			EqualGroups = true;
+		}
+		else{
+			EqualGroups = false;
+		}
+	}
+
 	public static int AmountofGroups(int teamsize){
-		return StudentName.length/teamsize;
+		if (EqualGroups){
+			return Students/teamsize;
+		}
+		else{
+			return Students/teamsize +1;
+		}
+	}
+
+	public static int AmountofPersoninGroups(int index){
+		if (EqualGroups){
+			return teamsize;
+		}
+		else if(Students-1-index >= teamsize){
+			return teamsize;
+		}
+		else{
+			return Students-index;
+		}
 	}
 
 	public static String[] ReturnGroupMember(int index, int teamsize){
 		int GroupNum = ReturnGroupNumber(index,teamsize);
-		String[] GourupMember = new String[10];
-
+		String[] GroupMember = new String[10];
+		int thisteamsize = AmountofPersoninGroups(index);
 		int startpoint = (GroupNum -1) * teamsize;  //first position of groupmember
-		int endpoint = GroupNum * teamsize -1;		//last 
-
-		for (int i = 0; i < teamsize; i++){
-			GourupMember[i] = StudentName[i+startpoint];
-		}
-		return GourupMember;
+			for (int i = 0; i < thisteamsize; i++){
+				GroupMember[i] = StudentName[i+startpoint];
+			}
+		
+		return GroupMember;
 	}
 
 	public static int PersonalHappiness(int index, int teamsize, int choices){
-		String[] GourupMember = ReturnGroupMember(index,teamsize);
+		String[] GroupMember = ReturnGroupMember(index,teamsize);
 		int happiness = 0;
 		int ifhavezero = 0;
-		if (StudentSet[index].length == 0){
-			return teamsize -1;
+		if (StudentSet[index][0] == null){
+			return AmountofPersoninGroups(index)-1;
 		}
 		for (int i = 0; i < choices; i++)
 		{
-			for (int j = 0; j < teamsize; j++){
-					if (StudentSet[index][i] == GourupMember[j]){
-						happiness += choices-i;
+			if (StudentSet[index][i] !=null){
+				for (int j = 0; j < AmountofPersoninGroups(index); j++){
+						if (StudentSet[index][i].equals(GroupMember[j])){
+							happiness += choices-i;
+						}
 					}
-				}
-			if (StudentSet[index][i] == "0"){
-					ifhavezero = 1;
-				}
+			}
+			// if (StudentSet[index][i] == "0"){
+			// 		ifhavezero = 1;
+			// 	}
 		}
 		return happiness;
 		// TODO consider person have no choices and different choices
@@ -204,9 +263,10 @@ public class HappyTeams
 		int GroupNum = ReturnGroupNumber(index,teamsize);
 		int startpoint = (GroupNum -1) * teamsize;
 		int happiness = 0;
-		for (int i = startpoint; i<startpoint+teamsize; i++){
+		for (int i = startpoint; i<startpoint+AmountofPersoninGroups(index); i++){
 			happiness += PersonalHappiness(i,teamsize,choices);
 		}
+
 		return happiness;
 	}
 
@@ -244,8 +304,8 @@ public class HappyTeams
 	// swap controller to generate the random num; times of swaping; comparing the result
 	public static void SwapController(int Times, int teamsize, int choices, int percentage){
 		for(int i=0; i<Times; i++){
-			int position1 = (int)getRandom(0,5);
-			int position2 = (int)getRandom(0,5);
+			int position1 = (int)getRandom(0,Students-1);
+			int position2 = (int)getRandom(0,Students-1);
 			int BackwardPercentage = (int)getRandom(0,100);
 			if (BackwardPercentage <= percentage){
 				System.out.println( "Hit backwardButton" );
@@ -253,7 +313,7 @@ public class HappyTeams
 			}
 
 			while (position1 == position2){
-				position2 = (int)getRandom(0,5);
+				position2 = (int)getRandom(0,Students-1);
 			}
 
 			String Nameholder = StudentName[position2];
@@ -295,16 +355,25 @@ public class HappyTeams
 	    	Swap(position1,position2);
 
 	    	//happiness  and V after swap
-	    	int swaphappiness = OverallHappiness(2,3);
-	    	double swapvariance = Variance(2,3);
+	    	int swaphappiness = OverallHappiness(teamsize,choices);
+	    	double swapvariance = Variance(teamsize,choices);
+
+	    	for(int m=0; m<Students; m++)
+	    	{
+	    		System.out.println( StudentName[m] + "'s happiness is: "+ PersonalHappiness(m,teamsize,choices));
+	    	}
+
+	    	for (int m=0; m<AmountofGroups(teamsize); m++){
+				System.out.println( "The " +(m+1) + " Team's happiness is: "+ TeamHappiness(m*teamsize,teamsize,choices));
+			}
 
 	    	System.out.println( "swap OverallHappiness is" + Integer.toString(swaphappiness) );
 	    	System.out.println( "swap Variance is" + Double.toString(swapvariance) );
 
 
-	    	for (int a=0; a<StudentName.length; a++){
+	    	for (int a=0; a<Students; a++){
 	    		System.out.println( "Student: " + StudentName[a] );
-	    		if (StudentSet[a].length !=0){	    			
+	    		if (StudentSet[a][0] !=null){	    			
 		    		for (int b=0; b<choices; b++){
 		    			if (StudentSet[a][b] != null){
 		    				System.out.println( StudentSet[a][b] );
@@ -319,11 +388,22 @@ public class HappyTeams
 
 
 	    	// keep if Overall is higher
-	    	if (swaphappiness >= temphappiness){
+	    	if (swaphappiness > temphappiness){
 	    		System.out.println( "Keep Result" );
 	    	}
+	    	else if (swaphappiness == temphappiness && swapvariance <= tempvariance){
+	    		System.out.println( "Equal happiness but lower or equal variance" );
+	    	}
+	    	else if (swaphappiness == temphappiness && swapvariance > tempvariance){
+	    		System.out.println( "Equal but higher variance" );
+	    		StudentName[position1] = position1nameholder;
+	    		StudentName[position2] = position2nameholder;
+	    		StudentSet[position1] = position1holder;
+	    		StudentSet[position2] = position2holder;
+	    	}
+
 	    	else{
-	    		System.out.println( "Keep Previous Result" );
+	    		System.out.println( "Keep Previous Result because new is lower " );
 	    		StudentName[position1] = position1nameholder;
 	    		StudentName[position2] = position2nameholder;
 	    		StudentSet[position1] = position1holder;
@@ -331,7 +411,7 @@ public class HappyTeams
 	    	}
 
 
-	    	for (int a=0; a<StudentName.length; a++){
+	    	for (int a=0; a<Students; a++){
 	    		System.out.println( "Student: " + StudentName[a] );
 	    		if (StudentSet[a].length !=0){	    			
 		    		for (int b=0; b<choices; b++){

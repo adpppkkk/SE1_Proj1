@@ -55,8 +55,11 @@ public class HappyTeams
 	static int StorageSize = 0;
 	static String[][] StudentNameStorage = new String[100][100];
 	static String[][][] StudentSetStorage = new String[100][100][20];
-	static Double[] VarianceStorage = new Double[100];
+	static double[] VarianceStorage = new double[100];
 	static int[] HappinessStorage = new int[100];
+	static int HappinessCompare;
+	static double VarianceCompare;
+	static boolean GoodVchoice = true;
 
 
 
@@ -156,8 +159,8 @@ public class HappyTeams
 	}
 
 	public static void main( String[] args ){
-	    	System.out.println( "we are in" );
-	    	System.out.println( verbosity );
+	    	//System.out.println( "we are in" );
+	    	//System.out.println( verbosity );
 	    	MainController(args);
 	    	// GetUserArguments(args);
 	    	// ReadInput();
@@ -503,39 +506,122 @@ public class HappyTeams
 		return index;
 	}
 
-	public static void Output(){
+	public static int FindHighestVariance(){
+		int index = 0;
+		for (int i=0; i<swaprounds-1; i++){
+			if (VarianceStorage[i+1] < VarianceStorage[i]){
+				index = i+1;
+			}
+		}
+		if (index == 0 && VarianceStorage[index] == 1000)
+		{
+			GoodVchoice = false;
+			System.out.println("No more suitable groupings!");
+		}
+		VarianceStorage[index] = 1000;
+		return index;
+	}
 
-		if (verbosity == 4){
+	public static void PrintTempHighHappiness(){
+		int index = FindHighestHappiness();
+		StudentName = StudentNameStorage[index];
+		StudentSet = StudentSetStorage[index];
+		System.out.println("Happy Team (" + OverallHappiness(teamsize,choices) + ")");
+		for (int i=0; i<AmountofGroups(teamsize); i++){
+			System.out.print( "Team " +(i+1) + " ("+ TeamHappiness(i*teamsize,teamsize,choices)+ "): ");
+			for (int j=0; j<AmountofPersoninGroups(i*2);j++){
+					
+				if (j == AmountofPersoninGroups(i*2)-1){
+					System.out.println(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + ")");
+				}
+				else{
+					System.out.print(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + "), ");
+				}
+					
+			}
+		}
+		System.out.println("The Variance is: " + Variance(teamsize,choices));
+	}
 
-		}
-		if (verbosity == 3){
-			
-		}
-		if (verbosity == 2){
-			
-		}
-		if (verbosity == 1){
-			
-		}
-		if (verbosity == 0){
-			int index = FindHighestHappiness();
-			StudentName = StudentNameStorage[index];
-			StudentSet = StudentSetStorage[index];
+	public static void PrintTempHighVariance(int happiness,double variance){
+		int index = FindHighestVariance();
+		StudentName = StudentNameStorage[index];
+		StudentSet = StudentSetStorage[index];
+		if (OverallHappiness(teamsize,choices) >= 0.5* happiness && Variance(teamsize,choices) < variance){
 			System.out.println("Happy Team (" + OverallHappiness(teamsize,choices) + ")");
 			for (int i=0; i<AmountofGroups(teamsize); i++){
-				System.out.println( "Team " +(i+1) + " ("+ TeamHappiness(i*teamsize,teamsize,choices)+ "): ");
+				System.out.print( "Team " +(i+1) + " ("+ TeamHappiness(i*teamsize,teamsize,choices)+ "): ");
 				for (int j=0; j<AmountofPersoninGroups(i*2);j++){
-					
+						
 					if (j == AmountofPersoninGroups(i*2)-1){
 						System.out.println(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + ")");
 					}
 					else{
-						System.out.println(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + "), ");
+						System.out.print(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + "), ");
 					}
-					
+						
 				}
 			}
-			System.out.println("The Variance is: " + VarianceStorage[index]);
+			System.out.println("The Variance is: " + Variance(teamsize,choices));
+		}
+		else if (GoodVchoice == false)
+		{
+			return;
+		}
+		else{
+			PrintTempHighVariance(happiness,variance);
+		}
+	}
+
+	public static void Output(){
+
+		if (verbosity == 4){
+			System.out.println("Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			HappinessCompare = OverallHappiness(teamsize,choices);
+			VarianceCompare = Variance(teamsize,choices);
+			System.out.println("Second Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			System.out.println("Third Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			System.out.println("Highest Oveall Variance Grouping is:");
+			PrintTempHighVariance(HappinessCompare,VarianceCompare);
+			System.out.println("Second Highest Oveall Variance Grouping is:");
+			PrintTempHighVariance(HappinessCompare,VarianceCompare);
+		}
+		if (verbosity == 3){
+			System.out.println("Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			HappinessCompare = OverallHappiness(teamsize,choices);
+			VarianceCompare = Variance(teamsize,choices);
+			System.out.println("Second Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			System.out.println("Highest Oveall Variance Grouping is:");
+			PrintTempHighVariance(HappinessCompare,VarianceCompare);
+			System.out.println("Second Highest Oveall Variance Grouping is:");
+			PrintTempHighVariance(HappinessCompare,VarianceCompare);
+		}
+		if (verbosity == 2){
+			System.out.println("Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			HappinessCompare = OverallHappiness(teamsize,choices);
+			VarianceCompare = Variance(teamsize,choices);
+			System.out.println("Second Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			System.out.println("Highest Oveall Variance Grouping is:");
+			PrintTempHighVariance(HappinessCompare,VarianceCompare);
+		}
+		if (verbosity == 1){
+			System.out.println("Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
+			HappinessCompare = OverallHappiness(teamsize,choices);
+			VarianceCompare = Variance(teamsize,choices);
+			System.out.println("Highest Oveall Variance Grouping is:");
+			PrintTempHighVariance(HappinessCompare,VarianceCompare);
+		}
+		if (verbosity == 0){
+			System.out.println("Highest Oveall Happiness Grouping is:");
+			PrintTempHighHappiness();
 		}
 	}
 

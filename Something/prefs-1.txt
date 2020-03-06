@@ -1,4 +1,6 @@
-person1,person2,person3,person4
-person2,person1,person3,person4
-person3,person1,person2,person4
-person4,person1,person2,person3
+aa1,3,5
+bb2,4,6
+cc3,1,4
+dd4,2
+ee5,1
+ff6,4

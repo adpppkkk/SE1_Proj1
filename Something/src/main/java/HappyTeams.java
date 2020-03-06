@@ -563,7 +563,6 @@ public class HappyTeams
 		if (index == 0 && VarianceStorage[index] == 1000)
 		{
 			GoodVchoice = false;
-			System.out.println("No more suitable groupings!");
 		}
 		VarianceStorage[index] = 1000;
 		return index;
@@ -634,6 +633,7 @@ public class HappyTeams
 		}
 		else if (GoodVchoice == false)
 		{
+			System.out.println("No more suitable groupings!");
 			return;
 		}
 		else{

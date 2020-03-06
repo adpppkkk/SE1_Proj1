@@ -45,15 +45,18 @@ public class HappyTeams
 	// static String[] F = {"6","2","1"};
 
 	static String[] StudentName = new String[100];
+	static int[] StudentIndex = new int[100];
 	static String[][] StudentSet = new String[100][20];
 	static int Students = 0;
 	static boolean EqualGroups = true;
 
 	static String[] DefaultStudentName = new String[100];
+	static int[] DefaultStudentIndex = new int[100];
 	static String[][] DefaultStudentSet = new String[100][20];
 
 	static int StorageSize = 0;
 	static String[][] StudentNameStorage = new String[100][100];
+	static int[][] StudentIndexStorage = new int[100][100];
 	static String[][][] StudentSetStorage = new String[100][100][20];
 	static double[] VarianceStorage = new double[100];
 	static int[] HappinessStorage = new int[100];
@@ -122,6 +125,7 @@ public class HappyTeams
             // TODO: insert the people into arrays;
             //System.out.println(tokens[0] + "'s preference are: ");
             StudentName[Students] = tokens[0];
+            StudentIndex[Students] = Students+1;
             for (int i=1; i<tokens.length; i++){
             	//System.out.println(tokens[i]);
             	StudentSet[Students][i-1] = tokens[i];
@@ -149,6 +153,10 @@ public class HappyTeams
         scanner.close();
         for (int i=0; i<Students; i++){
         	DefaultStudentName[i] = StudentName[i];
+        }
+
+        for (int i=0; i<Students; i++){
+        	DefaultStudentIndex[i] = StudentIndex[i];
         }
 
         for (int i=0; i<Students; i++){
@@ -270,8 +278,20 @@ public class HappyTeams
 		return GroupMember;
 	}
 
+	public static int[] ReturnGroupMemberIndex(int index, int teamsize){
+		int GroupNum = ReturnGroupNumber(index,teamsize);
+		int[] GroupMemberIndex = new int[10];
+		int thisteamsize = AmountofPersoninGroups(index);
+		int startpoint = (GroupNum -1) * teamsize;  //first position of groupmember
+			for (int i = 0; i < thisteamsize; i++){
+				GroupMemberIndex[i] = StudentIndex[i+startpoint];
+			}
+		
+		return GroupMemberIndex;
+	}
+
 	public static int PersonalHappiness(int index, int teamsize, int choices){
-		String[] GroupMember = ReturnGroupMember(index,teamsize);
+		int[] GroupMemberIndex = ReturnGroupMemberIndex(index,teamsize);
 		int happiness = 0;
 		int ifhavezero = 0;
 		if (StudentSet[index][0] == null){
@@ -281,7 +301,7 @@ public class HappyTeams
 		{
 			if (StudentSet[index][i] !=null){
 				for (int j = 0; j < AmountofPersoninGroups(index); j++){
-						if (StudentSet[index][i].equals(GroupMember[j])){
+						if (StudentSet[index][i].equals(Integer.toString(GroupMemberIndex[j]))){
 							happiness += choices-i;
 						}
 					}
@@ -352,14 +372,12 @@ public class HappyTeams
 				position2 = (int)getRandom(0,Students-1);
 			}
 
-			String Nameholder = StudentName[position2];
-			//make placeholder point to Position2
-			String[] Choiceholder = StudentSet[position2];
-			//pass values to positionholder to decide if keep track on the happiness
 	    	String[] position1holder = new String[10];
 	    	String[] position2holder = new String[10];
 	    	String position1nameholder = StudentName[position1];
 	    	String position2nameholder = StudentName[position2];
+	    	int position1Indexholder = StudentIndex[position1];
+	    	int position2Indexholder = StudentIndex[position2];
 	    	// System.out.println( "position1 is" + Integer.toString(position1) );
 	    	// System.out.println( "position2 is" + Integer.toString(position2) );
 
@@ -424,16 +442,20 @@ public class HappyTeams
 
 
 	    	// keep if Overall is higher
-	    	if (swaphappiness > temphappiness){
+	    	if (swaphappiness > temphappiness && BackwardPercentage >20){
 	    		//System.out.println( "Keep Result" );
+	    		return;
 	    	}
 	    	else if (swaphappiness == temphappiness && swapvariance <= tempvariance){
 	    		//System.out.println( "Equal happiness but lower or equal variance" );
+	    		return;
 	    	}
 	    	else if (swaphappiness == temphappiness && swapvariance > tempvariance){
 	    		//System.out.println( "Equal but higher variance" );
 	    		StudentName[position1] = position1nameholder;
 	    		StudentName[position2] = position2nameholder;
+	    		StudentIndex[position1] = position1Indexholder;
+	    		StudentIndex[position2] = position2Indexholder;
 	    		StudentSet[position1] = position1holder;
 	    		StudentSet[position2] = position2holder;
 	    	}
@@ -442,6 +464,8 @@ public class HappyTeams
 	    		//System.out.println( "Keep Previous Result because new is lower " );
 	    		StudentName[position1] = position1nameholder;
 	    		StudentName[position2] = position2nameholder;
+	    		StudentIndex[position1] = position1Indexholder;
+	    		StudentIndex[position2] = position2Indexholder;
 	    		StudentSet[position1] = position1holder;
 	    		StudentSet[position2] = position2holder;
 	    	}
@@ -472,6 +496,7 @@ public class HappyTeams
 			//make placeholder point to Position2
 			String[] Choiceholder = StudentSet[position2];
 
+			int Indexholder = StudentIndex[position2];
 	    	//Swap
 	    	StudentSet[position2] = StudentSet[position1];
 	    	StudentSet[position1] = Choiceholder;
@@ -479,17 +504,22 @@ public class HappyTeams
 	    	StudentName[position2] = StudentName[position1];
 	    	StudentName[position1] = Nameholder;
 
+	    	StudentIndex[position2] = StudentIndex[position1];
+	    	StudentIndex[position1] = Indexholder;
+
 		return;
 	}
 
 
 	public static void StoreResult(){
 		StudentNameStorage[StorageSize] = StudentName;
+		StudentIndexStorage[StorageSize] = StudentIndex;
 		StudentSetStorage[StorageSize] = StudentSet;
 		VarianceStorage[StorageSize] = Variance(teamsize,choices);
 		HappinessStorage[StorageSize] = OverallHappiness(teamsize,choices);
 
 		StudentName = DefaultStudentName;
+		StudentIndex = DefaultStudentIndex;
 		StudentSet = DefaultStudentSet;
 		StorageSize++;
 	}
@@ -503,6 +533,23 @@ public class HappyTeams
 			}
 		}
 		HappinessStorage[index] = 0;
+		// for (int i=0;i<Students; i++)
+		// {
+		// 	System.out.println("index is: " + Integer.toString(StudentIndexStorage[index][i]));
+		// }
+
+		// for (int i=0;i<Students; i++){
+			
+		// 	int[] a = ReturnGroupMemberIndex(i,teamsize);
+		// 	for (int k=0; k<teamsize;k++)
+		// 	{
+		// 		System.out.print(a[k] +" , ");
+		// 	}
+		// 	System.out.println(StudentNameStorage[index][i] + "'s prefs: ");
+		// 	for (int j=0;j<choices;j++){
+		// 		System.out.println(StudentSetStorage[index][i][j]);
+		// 	}
+		// }
 		return index;
 	}
 
@@ -526,16 +573,36 @@ public class HappyTeams
 		int index = FindHighestHappiness();
 		StudentName = StudentNameStorage[index];
 		StudentSet = StudentSetStorage[index];
+		StudentIndex = StudentIndexStorage[index];
+
+		// for (int i=0;i<Students; i++)
+		// {
+		// 	System.out.println("index is: " + Integer.toString(StudentIndex[i]));
+		// }
+
+		// for (int i=0;i<Students; i++){
+			
+		// 	int[] a = ReturnGroupMemberIndex(i,teamsize);
+		// 	for (int k=0; k<teamsize;k++)
+		// 	{
+		// 		System.out.print(a[k] +" , ");
+		// 	}
+		// 	System.out.println(StudentName[i] + "'s prefs: ");
+		// 	for (int j=0;j<choices;j++){
+		// 		System.out.println(StudentSet[i][j]);
+		// 	}
+		// }
+
 		System.out.println("Happy Team (" + OverallHappiness(teamsize,choices) + ")");
 		for (int i=0; i<AmountofGroups(teamsize); i++){
 			System.out.print( "Team " +(i+1) + " ("+ TeamHappiness(i*teamsize,teamsize,choices)+ "): ");
-			for (int j=0; j<AmountofPersoninGroups(i*2);j++){
+			for (int j=0; j<AmountofPersoninGroups(i*teamsize);j++){
 					
-				if (j == AmountofPersoninGroups(i*2)-1){
-					System.out.println(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + ")");
+				if (j == AmountofPersoninGroups(i*teamsize)-1){
+					System.out.println(StudentName[j+i*teamsize] + " (" + PersonalHappiness(j+i*teamsize,teamsize,choices) + ")");
 				}
 				else{
-					System.out.print(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + "), ");
+					System.out.print(StudentName[j+i*teamsize] + " (" + PersonalHappiness(j+i*teamsize,teamsize,choices) + "), ");
 				}
 					
 			}
@@ -547,17 +614,18 @@ public class HappyTeams
 		int index = FindHighestVariance();
 		StudentName = StudentNameStorage[index];
 		StudentSet = StudentSetStorage[index];
+		StudentIndex = StudentIndexStorage[index];
 		if (OverallHappiness(teamsize,choices) >= 0.5* happiness && Variance(teamsize,choices) < variance){
 			System.out.println("Happy Team (" + OverallHappiness(teamsize,choices) + ")");
 			for (int i=0; i<AmountofGroups(teamsize); i++){
 				System.out.print( "Team " +(i+1) + " ("+ TeamHappiness(i*teamsize,teamsize,choices)+ "): ");
-				for (int j=0; j<AmountofPersoninGroups(i*2);j++){
+				for (int j=0; j<AmountofPersoninGroups(i*teamsize);j++){
 						
-					if (j == AmountofPersoninGroups(i*2)-1){
-						System.out.println(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + ")");
+					if (j == AmountofPersoninGroups(i*teamsize)-1){
+						System.out.println(StudentName[j+i*teamsize] + " (" + PersonalHappiness(j+i*teamsize,teamsize,choices) + ")");
 					}
 					else{
-						System.out.print(StudentName[j+i*2] + " (" + PersonalHappiness(j+i*2,teamsize,choices) + "), ");
+						System.out.print(StudentName[j+i*teamsize] + " (" + PersonalHappiness(j+i*teamsize,teamsize,choices) + "), ");
 					}
 						
 				}
